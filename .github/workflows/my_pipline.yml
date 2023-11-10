@@ -1,1 +1,21 @@
+name: my pipeline for DevOps Crash Course 
 
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Print my firstname and lastname
+      run: echo "My name is Nikita Malov"
+    
+    - uses: actions/checkout@v4
+    - name: Build the site in a container
+      run: |
+        docker run \
+        -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
+        jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
+      
